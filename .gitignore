@@ -1,18 +1,26 @@
-# Default ignored files
-/shelf/
-/.idea/workspace.xml
-# Editor-based HTTP Client requests
-/httpRequests/
-# IntelliJ
+# Gradle
+.gradle/
+build/
+**/build/
+
+# Android / IntelliJ
 .idea/
 *.iml
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
 out/
 
 # VS Code
 .vscode/
 
-# Mac
+# macOS
 .DS_Store
 
 # Logs
 *.log
+
+# Misc
+shelf/
+httpRequests/
