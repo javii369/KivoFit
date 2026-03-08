@@ -100,12 +100,14 @@ fun InicioScreen(
                     icon = Icons.Filled.FitnessCenter,
                     value = state.trainings.toString(),
                     label = "Entrenamientos",
+                    circleColor = Color(0xFF2B7FFF),
                     modifier = Modifier.weight(1f)
                 )
                 StatCard(
                     icon = Icons.Filled.Whatshot,
                     value = formatCalories(state.calories),
                     label = "Calorías",
+                    circleColor = Color(0xFFFF6900),
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -117,12 +119,14 @@ fun InicioScreen(
                     icon = Icons.Filled.TrendingUp,
                     value = state.streak.toString(),
                     label = "Racha",
+                    circleColor = Color(0xFF00C950),
                     modifier = Modifier.weight(1f)
                 )
                 StatCard(
                     icon = Icons.Filled.CheckCircle,
                     value = "${state.goalsCompleted}/${state.goalsTotal}",
                     label = "Objetivos",
+                    circleColor = Color(0xFFAD46FF),
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -134,10 +138,10 @@ fun InicioScreen(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(120.dp),
+                .height(200.dp),
             shape = MaterialTheme.shapes.large,
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.tertiary
+                containerColor = Color(0xFF6933F7)
             )
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -165,7 +169,7 @@ fun InicioScreen(
                     Box(
                         modifier = Modifier
                             .size(48.dp)
-                            .background(MaterialTheme.colorScheme.secondary, CircleShape),
+                            .background(Color(0xFF06DF72), CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -186,7 +190,7 @@ fun InicioScreen(
                             "Completa el formulario para que tu entrenador pueda diseñar tu rutina y dieta a medida",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onTertiary,
-                            maxLines = 2,
+                            maxLines = 3,
                             overflow = TextOverflow.Ellipsis
                         )
                         Spacer(modifier = Modifier.height(s.sm))

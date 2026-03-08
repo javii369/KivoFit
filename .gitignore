@@ -24,3 +24,9 @@ out/
 # Misc
 shelf/
 httpRequests/
+
+# Local machine / debug artifacts
+*.hprof
+.bash_history
+.emulator_console_auth_token
+.gitconfig
