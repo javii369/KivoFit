@@ -19,5 +19,8 @@ fun CalendarEntry(
 
     val state by vm.state.collectAsState()
 
-    CalendarScreen(state = state)
+    CalendarScreen(
+        state = state,
+        contentPadding = contentPadding
+    )
 }
