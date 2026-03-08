@@ -19,5 +19,8 @@ fun ChatEntry(
 
     val state by vm.state.collectAsState()
 
-    ChatScreen(state = state)
+    ChatScreen(
+        state = state,
+        contentPadding = contentPadding
+    )
 }

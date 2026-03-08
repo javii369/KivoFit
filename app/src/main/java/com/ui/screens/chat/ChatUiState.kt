@@ -5,5 +5,5 @@ package com.KivoFit.ui.screens.chat
  */
 
 data class ChatUiState(
-    val title: String = "Chat IA"
+    val title: String = "Asistente IA"
 )
