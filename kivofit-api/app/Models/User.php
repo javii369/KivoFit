@@ -2,31 +2,66 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+    protected $fillable = [
+        'dni',
+        'nombre',
+        'apellido',
+        'segundo_apellido',
+        'foto_url',
+        'email',
+        'password',
+        'rol',
+        'activo',
+        'fecha_registro',
+        'ultimo_acceso',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'activo' => 'boolean',
+            'fecha_registro' => 'datetime',
+            'ultimo_acceso' => 'datetime',
         ];
+    }
+
+    // Relaciones
+    public function cliente()
+    {
+        return $this->hasOne(Cliente::class, 'user_id');
+    }
+
+    public function entrenador()
+    {
+        return $this->hasOne(Entrenador::class, 'user_id');
+    }
+
+    public function administrador()
+    {
+        return $this->hasOne(Administrador::class, 'user_id');
+    }
+
+    public function formulario()
+    {
+        return $this->hasOne(Formulario::class, 'user_id');
+    }
+
+    public function consultasAi()
+    {
+        return $this->hasMany(ConsultaIa::class, 'user_id');
     }
 }
