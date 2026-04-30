@@ -10,7 +10,7 @@ class Administrador extends Model
     use HasFactory;
 
     protected $primaryKey = 'user_id';
-    protected $table = 'entrenadores';
+    protected $table = 'administradores';
     public $incrementing = false;
 
     protected $fillable = [

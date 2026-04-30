@@ -32,7 +32,7 @@ class AuthController extends Controller
         ]);
 
         try {
-            $result = \DB::transaction(function () use ($request) {
+            $result = DB::transaction(function () use ($request) {
                 // Creamos el usuario base
                 $user = User::create([
                     'dni'              => $request->dni,
