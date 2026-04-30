@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -30,32 +31,43 @@ class AuthController extends Controller
             'rol'              => 'required|in:cliente,entrenador,administrador',
         ]);
 
-        // Creamos el usuario base
-        $user = User::create([
-            'dni'              => $request->dni,
-            'nombre'           => $request->nombre,
-            'apellido'         => $request->apellido,
-            'segundo_apellido' => $request->segundo_apellido,
-            'email'            => $request->email,
-            'password'         => Hash::make($request->password),
-            'rol'              => $request->rol,
-        ]);
+        try {
+            $result = \DB::transaction(function () use ($request) {
+                // Creamos el usuario base
+                $user = User::create([
+                    'dni'              => $request->dni,
+                    'nombre'           => $request->nombre,
+                    'apellido'         => $request->apellido,
+                    'segundo_apellido' => $request->segundo_apellido,
+                    'email'            => $request->email,
+                    'password'         => Hash::make($request->password),
+                    'rol'              => $request->rol,
+                ]);
 
-        // Creamos el perfil según el rol
-        match ($request->rol) {
-            'cliente'        => Cliente::create(['user_id' => $user->id]),
-            'entrenador'     => Entrenador::create(['user_id' => $user->id]),
-            'administrador'  => Administrador::create(['user_id' => $user->id]),
-        };
+                // Creamos el perfil según el rol
+                match ($request->rol) {
+                    'cliente'       => Cliente::create(['user_id' => $user->id]),
+                    'entrenador'    => Entrenador::create(['user_id' => $user->id]),
+                    'administrador' => Administrador::create(['user_id' => $user->id]),
+                };
 
-        // Generamos el token de autenticación
-        $token = $user->createToken('auth_token')->plainTextToken;
+                return $user;
+            });
 
-        return response()->json([
-            'message' => 'Usuario registrado correctamente',
-            'user'    => $user,
-            'token'   => $token,
-        ], 201);
+            // Generamos el token de autenticación
+            $token = $result->createToken('auth_token')->plainTextToken;
+
+            return response()->json([
+                'message' => 'Usuario registrado correctamente',
+                'user'    => $result,
+                'token'   => $token,
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al registrar el usuario',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**

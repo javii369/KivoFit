@@ -31,11 +31,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me',      [AuthController::class, 'me']);
 
     // Cliente
-    Route::get('/cliente',          [ClienteController::class, 'show']);
-    Route::put('/cliente',          [ClienteController::class, 'update']);
-    Route::get('/cliente/dietas',   [ClienteController::class, 'dietas']);
-    Route::get('/cliente/rutinas',  [ClienteController::class, 'rutinas']);
-    Route::get('/cliente/clases',   [ClienteController::class, 'clases']);
+    Route::get('/cliente',         [ClienteController::class, 'show']);
+    Route::put('/cliente',         [ClienteController::class, 'update']);
+    Route::get('/cliente/dietas',  [ClienteController::class, 'dietas']);
+    Route::get('/cliente/rutinas', [ClienteController::class, 'rutinas']);
+    Route::get('/cliente/clases',  [ClienteController::class, 'clases']);
 
     // Entrenador
     Route::get('/entrenador',        [EntrenadorController::class, 'show']);
@@ -46,28 +46,34 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/formulario',  [FormularioController::class, 'show']);
     Route::post('/formulario', [FormularioController::class, 'store']);
 
-    // Dietas
-    Route::get('/dietas',              [DietaController::class, 'index']);
-    Route::get('/dietas/{dieta}',      [DietaController::class, 'show']);
-    Route::post('/dietas',             [DietaController::class, 'store']);
-    Route::put('/dietas/{dieta}',      [DietaController::class, 'update']);
-    Route::delete('/dietas/{dieta}',   [DietaController::class, 'destroy']);
-    Route::post('/dietas/{dieta}/asignar', [DietaController::class, 'asignar']);
+    // Dietas — lectura para todos, escritura solo entrenadores y administradores
+    Route::get('/dietas',         [DietaController::class, 'index']);
+    Route::get('/dietas/{dieta}', [DietaController::class, 'show']);
+    Route::middleware('rol:entrenador,administrador')->group(function () {
+        Route::post('/dietas',                 [DietaController::class, 'store']);
+        Route::put('/dietas/{dieta}',          [DietaController::class, 'update']);
+        Route::delete('/dietas/{dieta}',       [DietaController::class, 'destroy']);
+        Route::post('/dietas/{dieta}/asignar', [DietaController::class, 'asignar']);
+    });
 
-    // Rutinas
-    Route::get('/rutinas',             [RutinaController::class, 'index']);
-    Route::get('/rutinas/{rutina}',    [RutinaController::class, 'show']);
-    Route::post('/rutinas',            [RutinaController::class, 'store']);
-    Route::put('/rutinas/{rutina}',    [RutinaController::class, 'update']);
-    Route::delete('/rutinas/{rutina}', [RutinaController::class, 'destroy']);
-    Route::post('/rutinas/{rutina}/asignar', [RutinaController::class, 'asignar']);
+    // Rutinas — lectura para todos, escritura solo entrenadores y administradores
+    Route::get('/rutinas',          [RutinaController::class, 'index']);
+    Route::get('/rutinas/{rutina}', [RutinaController::class, 'show']);
+    Route::middleware('rol:entrenador,administrador')->group(function () {
+        Route::post('/rutinas',                  [RutinaController::class, 'store']);
+        Route::put('/rutinas/{rutina}',          [RutinaController::class, 'update']);
+        Route::delete('/rutinas/{rutina}',       [RutinaController::class, 'destroy']);
+        Route::post('/rutinas/{rutina}/asignar', [RutinaController::class, 'asignar']);
+    });
 
-    // Clases
-    Route::get('/clases',            [ClaseController::class, 'index']);
-    Route::get('/clases/{clase}',    [ClaseController::class, 'show']);
-    Route::post('/clases',           [ClaseController::class, 'store']);
-    Route::put('/clases/{clase}',    [ClaseController::class, 'update']);
-    Route::delete('/clases/{clase}', [ClaseController::class, 'destroy']);
+    // Clases — lectura para todos, escritura solo entrenadores y administradores
+    Route::get('/clases',         [ClaseController::class, 'index']);
+    Route::get('/clases/{clase}', [ClaseController::class, 'show']);
+    Route::middleware('rol:entrenador,administrador')->group(function () {
+        Route::post('/clases',           [ClaseController::class, 'store']);
+        Route::put('/clases/{clase}',    [ClaseController::class, 'update']);
+        Route::delete('/clases/{clase}', [ClaseController::class, 'destroy']);
+    });
 
     // Sesiones de clase
     Route::get('/sesiones',                      [SesionClaseController::class, 'index']);
@@ -75,16 +81,20 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/sesiones/{sesion}/apuntarse',  [SesionClaseController::class, 'apuntarse']);
     Route::delete('/sesiones/{sesion}/cancelar', [SesionClaseController::class, 'cancelar']);
 
-    // Tienda
-    Route::get('/tienda',             [TiendaController::class, 'index']);
-    Route::get('/tienda/{tienda}',    [TiendaController::class, 'show']);
-    Route::post('/tienda',            [TiendaController::class, 'store']);
-    Route::put('/tienda/{tienda}',    [TiendaController::class, 'update']);
-    Route::delete('/tienda/{tienda}', [TiendaController::class, 'destroy']);
+    // Tienda — lectura para todos, escritura solo administradores
+    Route::get('/tienda',          [TiendaController::class, 'index']);
+    Route::get('/tienda/{tienda}', [TiendaController::class, 'show']);
+    Route::middleware('rol:administrador')->group(function () {
+        Route::post('/tienda',            [TiendaController::class, 'store']);
+        Route::put('/tienda/{tienda}',    [TiendaController::class, 'update']);
+        Route::delete('/tienda/{tienda}', [TiendaController::class, 'destroy']);
+    });
 
-    // Inventario
-    Route::get('/inventario',              [InventarioController::class, 'index']);
-    Route::put('/inventario/{tienda}',     [InventarioController::class, 'update']);
+    // Inventario — lectura para todos, escritura solo administradores
+    Route::get('/inventario', [InventarioController::class, 'index']);
+    Route::middleware('rol:administrador')->group(function () {
+        Route::put('/inventario/{tienda}', [InventarioController::class, 'update']);
+    });
 
     // Compras
     Route::get('/compras',  [CompraController::class, 'index']);
@@ -94,10 +104,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/consultas-ia',  [ConsultaIaController::class, 'index']);
     Route::post('/consultas-ia', [ConsultaIaController::class, 'store']);
 
-    // Administrador
-    Route::prefix('admin')->group(function () {
-        Route::get('/usuarios',              [AdministradorController::class, 'usuarios']);
+    // Admin — solo administradores
+    Route::prefix('admin')->middleware('rol:administrador')->group(function () {
+        Route::get('/usuarios',               [AdministradorController::class, 'usuarios']);
         Route::put('/usuarios/{user}/toggle', [AdministradorController::class, 'toggleUsuario']);
-        Route::delete('/usuarios/{user}',    [AdministradorController::class, 'eliminarUsuario']);
+        Route::delete('/usuarios/{user}',     [AdministradorController::class, 'eliminarUsuario']);
     });
 });

@@ -10,6 +10,7 @@ class Entrenador extends Model
     use HasFactory;
 
     protected $primaryKey = 'user_id';
+    protected $table = 'entrenadores';
     public $incrementing = false;
 
     protected $fillable = [
