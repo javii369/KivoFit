@@ -1,6 +1,5 @@
 package com.KivoFit.navigation.navGraph
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.SnackbarHostState
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -10,14 +9,9 @@ import com.KivoFit.ui.screens.chat.ChatEntry
 
 fun NavGraphBuilder.chatGraph(
     navController: NavHostController,
-    snackbarHostState: SnackbarHostState,
-    contentPadding: PaddingValues
+    snackbarHostState: SnackbarHostState
 ) {
     composable(Route.Chat.route) {
-        ChatEntry(
-            navController = navController,
-            snackbarHostState = snackbarHostState,
-            contentPadding = contentPadding
-        )
+        ChatEntry(navController, snackbarHostState)
     }
 }

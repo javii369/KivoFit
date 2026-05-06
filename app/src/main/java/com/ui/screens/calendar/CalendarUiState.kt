@@ -1,11 +1,14 @@
 package com.KivoFit.ui.screens.calendar
 
-/**
- * ----------------------------------------------------------------------------
- * CalendarUiState.kt
- * ----------------------------------------------------------------------------
- */
-
 data class CalendarUiState(
-    val title: String = "Calendario"
+    val title: String = "Calendario",
+    val classes: List<CalendarClass> = emptyList()
+)
+
+data class CalendarClass(
+    val id: String,
+    val name: String,
+    val dateLabel: String,
+    val timeLabel: String,
+    val durationMinutes: Int
 )

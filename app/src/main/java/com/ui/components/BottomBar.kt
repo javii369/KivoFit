@@ -6,10 +6,12 @@ import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -31,33 +33,44 @@ fun BottomBar(navController: NavHostController) {
         BottomNavItem(Route.History.route, Icons.Filled.History, "Historial"),
         BottomNavItem(Route.Calendar.route, Icons.Filled.CalendarToday, "Calendario"),
         BottomNavItem(Route.Inicio.route, Icons.Filled.Home, "Inicio"),
-        BottomNavItem(Route.Chat.route, Icons.Filled.Chat, "Chat IA"),
+        BottomNavItem(Route.Chat.route, Icons.Filled.Chat, "Asistente"),
         BottomNavItem(Route.Notifications.route, Icons.Filled.Notifications, "Avisos")
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination: NavDestination? = navBackStackEntry?.destination
 
-    NavigationBar {
+    NavigationBar(
+        containerColor = MaterialTheme.colorScheme.surface,
+        contentColor = MaterialTheme.colorScheme.onSurface
+    ) {
         items.forEach { item ->
             NavigationBarItem(
-                icon = { androidx.compose.material3.Icon(imageVector = item.icon, contentDescription = item.label) },
-                label = { Text(item.label,
-                    style = MaterialTheme.typography.labelSmall,
-                    maxLines = 1
-                ) },
+                icon = { Icon(imageVector = item.icon, contentDescription = item.label) },
+                label = {
+                    Text(
+                        item.label,
+                        style = MaterialTheme.typography.labelSmall,
+                        maxLines = 1
+                    )
+                },
                 selected = currentDestination?.route == item.route,
                 onClick = {
                     navController.navigate(item.route) {
-                        // Pop up to the start destination of the graph to avoid building up a large stack
                         popUpTo(navController.graph.findStartDestination().id) {
                             saveState = true
                         }
-                        // Avoid multiple copies of the same destination when reselecting the same item
                         launchSingleTop = true
                         restoreState = true
                     }
-                }
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                    selectedTextColor = MaterialTheme.colorScheme.primary,
+                    indicatorColor = MaterialTheme.colorScheme.primary,
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                )
             )
         }
     }

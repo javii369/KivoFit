@@ -58,11 +58,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)
 
-    // Material icons (extended) – necesarios para los íconos usados en InicioScreen
     implementation("androidx.compose.material:material-icons-extended")
-
-    // Coil para carga de imágenes en HomeScreen
-    implementation("io.coil-kt:coil-compose:2.4.0")
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

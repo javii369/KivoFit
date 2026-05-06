@@ -1,7 +1,6 @@
 package com.KivoFit.ui.screens.auth.recover
 
 import android.util.Patterns
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.KivoFit.domain.usecase.auth.RecoverPasswordUseCase
@@ -17,8 +16,7 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class RecoverPasswordViewModel @Inject constructor(
-    private val recoverUseCase: RecoverPasswordUseCase,
-    private val savedStateHandle: SavedStateHandle
+    private val recoverUseCase: RecoverPasswordUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(RecoverPasswordUiState())
@@ -48,7 +46,6 @@ class RecoverPasswordViewModel @Inject constructor(
         _state.value = _state.value.copy(isLoading = false)
 
         result.onSuccess {
-            // Aviso y volver atrás al Login
             _events.send(UiEvent.ShowSnackbar("Te hemos enviado un email de recuperación"))
             _events.send(UiEvent.NavigateBack)
         }.onFailure { ex ->

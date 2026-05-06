@@ -1,7 +1,5 @@
 package com.KivoFit.ui.screens.auth.recover
 
-/// TODO Añadir comentarios
-
 data class RecoverPasswordUiState(
     val email: String = "",
     val isLoading: Boolean = false,

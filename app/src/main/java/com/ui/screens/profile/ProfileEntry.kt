@@ -1,4 +1,4 @@
-package com.KivoFit.ui.screens.inicio
+package com.KivoFit.ui.screens.profile
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -9,18 +9,22 @@ import androidx.navigation.NavHostController
 import com.KivoFit.navigation.HandleNavigationEvents
 
 @Composable
-fun InicioEntry(
+fun ProfileEntry(
     navController: NavHostController,
     snackbarHostState: SnackbarHostState
 ) {
-    val vm: InicioViewModel = hiltViewModel()
+    val vm: ProfileViewModel = hiltViewModel()
     HandleNavigationEvents(navController, snackbarHostState, vm.events)
     val state by vm.state.collectAsState()
 
-    InicioScreen(
+    ProfileScreen(
         state = state,
-        onRequestPlan = vm::onRequestPlan,
-        onReserveClass = vm::onReserveClass,
-        onViewRoutine = vm::onViewRoutine
+        onChangePhoto = vm::onChangePhoto,
+        onEditProfile = vm::onEditProfile,
+        onChangePassword = vm::onChangePassword,
+        onToggleNotifications = vm::onToggleNotifications,
+        onToggleDarkMode = vm::onToggleDarkMode,
+        onHelp = vm::onHelp,
+        onLogout = vm::onLogout
     )
 }

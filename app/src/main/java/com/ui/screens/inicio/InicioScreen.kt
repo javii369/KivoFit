@@ -24,29 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.KivoFit.ui.theme.KivoFitTheme
 
-/**
- * ----------------------------------------------------------------------------
- * InicioScreen.kt
- * ----------------------------------------------------------------------------
- *
- * Pantalla principal real de la aplicación. Reemplaza la antigua pantalla
- * "Home" y muestra un saludo al usuario, sus estadísticas clave, un acceso a
- * un plan personalizado y acciones rápidas.
- *
- * El diseño está inspirado en la imagen de referencia proporcionada por el
- * usuario; se han respetado los colores, espaciamientos y jerarquía visual.
- *
- * Este Composable es **UI pura**: solo recibe un `InicioUiState` y callbacks
- * para las interacciones. No hace navegación ni lógica de negocio.
- *
- * ----------------------------------------------------------------------------
- * Parámetros
- * ----------------------------------------------------------------------------
- * @param state Estado actual (`InicioUiState`) con todos los datos de la vista.
- * @param onRequestPlan Callback pulsado cuando el usuario solicita el plan.
- * @param onReserveClass Callback para "Reservar Clase".
- * @param onViewRoutine Callback para "Mi Rutina".
- */
 @Composable
 fun InicioScreen(
     state: InicioUiState,
@@ -62,35 +39,21 @@ fun InicioScreen(
             .background(MaterialTheme.colorScheme.background)
             .padding(s.lg)
     ) {
-        // SALUDO
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column {
-                Text(
-                    "¡Hola, ${state.userName}!",
-                    style = MaterialTheme.typography.headlineMedium
-                )
-                Spacer(modifier = Modifier.height(s.xs))
-                Text(
-                    "Listo para entrenar hoy",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
-                )
-            }
-            // Avatar placeholder
-            Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .background(MaterialTheme.colorScheme.primary, CircleShape)
+        Column {
+            Text(
+                "¡Hola!",
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Spacer(modifier = Modifier.height(s.xs))
+            Text(
+                "Listo para entrenar hoy",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
             )
         }
 
         Spacer(modifier = Modifier.height(s.xl))
 
-        // ESTADÍSTICAS: cuadricula 2x2
         Column(verticalArrangement = Arrangement.spacedBy(s.md)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -130,7 +93,6 @@ fun InicioScreen(
 
         Spacer(modifier = Modifier.height(s.xl))
 
-        // TARJETA PLAN PERSONALIZADO
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -141,7 +103,6 @@ fun InicioScreen(
             )
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
-                // badge "Nuevo" en esquina superior derecha
                 Text(
                     "Nuevo",
                     style = MaterialTheme.typography.labelSmall,
@@ -203,7 +164,6 @@ fun InicioScreen(
 
         Spacer(modifier = Modifier.height(s.xl))
 
-        // ACCIONES RÁPIDAS
         Text(
             "Acciones Rápidas",
             style = MaterialTheme.typography.titleMedium,
@@ -236,24 +196,18 @@ fun InicioScreen(
     }
 }
 
-// -----------------------------------------------------------------------------
-// Componentes auxiliares privados
-// -----------------------------------------------------------------------------
-
 @Composable
 private fun StatCard(
     icon: ImageVector,
     value: String,
     label: String,
-    circleColor: Color = MaterialTheme.colorScheme.primary,
-    cardColor: Color = MaterialTheme.colorScheme.surfaceVariant,
     modifier: Modifier = Modifier
 ) {
     val s = KivoFitTheme.spacing
     Card(
         shape = MaterialTheme.shapes.medium,
         modifier = modifier,
-        colors = CardDefaults.cardColors(containerColor = cardColor)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Column(
             modifier = Modifier
@@ -264,7 +218,7 @@ private fun StatCard(
             Box(
                 modifier = Modifier
                     .size(32.dp)
-                    .background(circleColor, CircleShape),
+                    .background(MaterialTheme.colorScheme.primary, CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -352,14 +306,10 @@ private fun formatCalories(value: Int): String {
     return if (value < 1000) "${value}" else "${value / 1000}.${(value % 1000) / 100}K"
 }
 
-// -----------------------------------------------------------------------------
-// Previews
-// -----------------------------------------------------------------------------
-
 @Composable
 @Preview(showBackground = true)
 fun InicioScreenPreview() {
-    KivoFitTheme(darkTheme = true) {
+    KivoFitTheme {
         InicioScreen(
             state = InicioUiState(
                 userName = "Juan",
