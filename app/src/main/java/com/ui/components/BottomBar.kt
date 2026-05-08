@@ -33,7 +33,7 @@ fun BottomBar(navController: NavHostController) {
         BottomNavItem(Route.History.route, Icons.Filled.History, "Historial"),
         BottomNavItem(Route.Calendar.route, Icons.Filled.CalendarToday, "Calendario"),
         BottomNavItem(Route.Inicio.route, Icons.Filled.Home, "Inicio"),
-        BottomNavItem(Route.Chat.route, Icons.Filled.Chat, "Asistente"),
+        BottomNavItem(Route.Chat.route, Icons.Filled.Chat, "Chat IA"),
         BottomNavItem(Route.Notifications.route, Icons.Filled.Notifications, "Avisos")
     )
 
