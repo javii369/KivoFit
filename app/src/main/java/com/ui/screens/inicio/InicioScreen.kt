@@ -3,6 +3,8 @@ package com.KivoFit.ui.screens.inicio
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
@@ -14,6 +16,10 @@ import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.foundation.Image
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,6 +28,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.KivoFit.R
 import com.KivoFit.ui.theme.KivoFitTheme
 
 @Composable
@@ -33,10 +40,26 @@ fun InicioScreen(
 ) {
     val s = KivoFitTheme.spacing
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.logo_kivofit),
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
+            colorFilter = ColorFilter.tint(Color(0xFF2D3D34)),
+            alpha = 0.85f,
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center)
+        )
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(s.lg)
     ) {
         Column {
@@ -103,7 +126,7 @@ fun InicioScreen(
                 .height(200.dp),
             shape = MaterialTheme.shapes.large,
             colors = CardDefaults.cardColors(
-                containerColor = Color(0xFF6933F7)
+                containerColor = Color(0xFF6933F7).copy(alpha = 0.65f)
             )
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -198,6 +221,7 @@ fun InicioScreen(
             )
         }
     }
+    }
 }
 
 @Composable
@@ -212,7 +236,9 @@ private fun StatCard(
     Card(
         shape = MaterialTheme.shapes.medium,
         modifier = modifier,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f)
+        )
     ) {
         Column(
             modifier = Modifier
@@ -262,7 +288,9 @@ private fun QuickAction(
         modifier = modifier
             .clickable(onClick = onClick),
         shape = MaterialTheme.shapes.medium,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f)
+        )
     ) {
         Row(
             modifier = Modifier

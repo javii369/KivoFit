@@ -1,10 +1,15 @@
 package com.KivoFit.ui.screens.history
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import com.KivoFit.R
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.CalendarToday
@@ -33,10 +38,25 @@ fun HistoryScreen(
 ) {
     val s = KivoFitTheme.spacing
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.logo_kivofit),
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
+            colorFilter = ColorFilter.tint(Color(0xFF2D3D34)),
+            alpha = 0.85f,
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center)
+        )
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(s.lg)
     ) {
@@ -72,6 +92,7 @@ fun HistoryScreen(
             }
         }
     }
+    }
 }
 
 @Composable
@@ -81,7 +102,7 @@ private fun ProgressSection(label: String, stats: ProgressStats) {
         modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.large,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f)
         )
     ) {
         Column(modifier = Modifier.padding(s.md)) {
@@ -141,7 +162,7 @@ private fun StatTile(
     Column(
         modifier = modifier
             .background(
-                MaterialTheme.colorScheme.surface,
+                MaterialTheme.colorScheme.surface.copy(alpha = 0.55f),
                 MaterialTheme.shapes.medium
             )
             .padding(vertical = s.sm, horizontal = s.xs),
@@ -182,7 +203,7 @@ private fun EmptyActivitiesPlaceholder() {
         modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f)
         )
     ) {
         Row(
@@ -220,7 +241,7 @@ private fun ActivityRow(item: HistoryActivity) {
         modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f)
         )
     ) {
         Row(

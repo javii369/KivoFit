@@ -1,8 +1,13 @@
 package com.KivoFit.ui.screens.chat
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import com.KivoFit.R
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -40,10 +45,24 @@ fun ChatScreen(
         if (target >= 0) listState.animateScrollToItem(target)
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.logo_kivofit),
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
+            colorFilter = ColorFilter.tint(Color(0xFF2D3D34)),
+            alpha = 0.85f,
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center)
+        )
+
+    Column(
+        modifier = Modifier.fillMaxSize()
     ) {
         ChatHeader(title = state.title, status = state.statusLabel)
 
@@ -71,6 +90,7 @@ fun ChatScreen(
             onValueChange = onDraftChange,
             onSend = onSend
         )
+    }
     }
 }
 
