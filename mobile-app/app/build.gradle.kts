@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -16,8 +18,16 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-        // Emulador Android → host: 10.0.2.2. En dispositivo físico, sustituye por la IP LAN de tu PC.
-        buildConfigField("String", "API_BASE_URL", "\"http://10.0.2.2:8000/api/\"")
+
+        val props = Properties().apply {
+            val f = rootProject.file("local.properties")
+            if (f.exists()) f.inputStream().use { load(it) }
+        }
+        // En local.properties: API_BASE_URL=http://TU_IP_LAN:8000/api/  (móvil físico)
+        // Emulador sin override: http://10.0.2.2:8000/api/
+        val raw = props.getProperty("API_BASE_URL", "http://10.0.2.2:8000/api/").trim().trim('"')
+        val apiBase = if (raw.endsWith("/")) raw else "$raw/"
+        buildConfigField("String", "API_BASE_URL", "\"${apiBase.replace("\"", "\\\"")}\"")
     }
 
     buildTypes {
