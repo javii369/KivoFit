@@ -4,6 +4,7 @@ import com.KivoFit.data.network.dto.AuthResponse
 import com.KivoFit.data.network.dto.LoginRequest
 import com.KivoFit.data.network.dto.MessageResponse
 import com.KivoFit.data.network.dto.RegisterRequest
+import com.KivoFit.data.network.dto.SesionClaseDto
 import com.KivoFit.data.network.dto.UserDto
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -22,4 +23,7 @@ interface KivoFitApi {
 
     @GET("me")
     suspend fun me(): UserDto
+
+    @GET("sesiones")
+    suspend fun sesiones(): List<SesionClaseDto>
 }

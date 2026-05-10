@@ -19,6 +19,9 @@ fun RegisterEntry(
 
     RegisterScreen(
         state = state,
+        onDniChange = vm::onDniChange,
+        onNombreChange = vm::onNombreChange,
+        onApellidoChange = vm::onApellidoChange,
         onEmailChange = vm::onEmailChange,
         onPasswordChange = vm::onPasswordChange,
         onRepeatChange = vm::onRepeatChange,

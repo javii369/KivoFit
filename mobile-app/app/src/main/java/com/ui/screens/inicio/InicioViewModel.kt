@@ -2,20 +2,24 @@ package com.KivoFit.ui.screens.inicio
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.KivoFit.domain.repository.user.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 @HiltViewModel
-class InicioViewModel @Inject constructor() : ViewModel() {
+class InicioViewModel @Inject constructor(
+    private val userRepository: UserRepository
+) : ViewModel() {
 
     private val _state = MutableStateFlow(
         InicioUiState(
-            userName = "Juan",
+            userName = "",
             trainings = 24,
             calories = 8500,
             streak = 12,
@@ -31,6 +35,18 @@ class InicioViewModel @Inject constructor() : ViewModel() {
         kotlinx.coroutines.channels.Channel.BUFFERED
     )
     val events = _events.receiveAsFlow()
+
+    init {
+        loadUserName()
+    }
+
+    private fun loadUserName() = viewModelScope.launch {
+        userRepository.getMe()
+            .onSuccess { u ->
+                val firstName = u.nombre.trim().ifBlank { "Usuario" }
+                _state.update { it.copy(userName = firstName) }
+            }
+    }
 
     fun onRequestPlan() = viewModelScope.launch {
         _events.send(

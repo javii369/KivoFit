@@ -89,5 +89,5 @@ class LoginViewModel @Inject constructor(
         }
 
     private fun validatePassword(p: String): String? =
-        if (p.length < 4) "Mínimo 4 caracteres" else null
+        if (p.length < 8) "Mínimo 8 caracteres (requisito del servidor)" else null
 }

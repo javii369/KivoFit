@@ -148,19 +148,19 @@ private fun ProfileHeader(state: ProfileUiState, onChangePhoto: () -> Unit) {
         }
         Spacer(Modifier.height(s.md))
         Text(
-            state.userName,
+            if (state.isLoading) "…" else state.userName,
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onBackground,
             fontWeight = FontWeight.SemiBold
         )
         Text(
-            state.email,
+            if (state.isLoading) "…" else state.email,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
         )
         Spacer(Modifier.height(s.xs))
         Text(
-            state.membership,
+            if (state.isLoading) "…" else state.membership,
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.primary
         )

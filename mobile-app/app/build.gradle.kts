@@ -16,6 +16,8 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
+        // Emulador Android → host: 10.0.2.2. En dispositivo físico, sustituye por la IP LAN de tu PC.
+        buildConfigField("String", "API_BASE_URL", "\"http://10.0.2.2:8000/api/\"")
     }
 
     buildTypes {

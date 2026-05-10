@@ -1,7 +1,11 @@
 package com.KivoFit.di
 
+import com.KivoFit.data.repository.RemoteAuthRepository
+import com.KivoFit.data.repository.RemoteSesionesRepository
+import com.KivoFit.data.repository.RemoteUserRepository
 import com.KivoFit.domain.repository.auth.AuthRepository
-import com.KivoFit.data.repository.FakeAuthRepository
+import com.KivoFit.domain.repository.schedule.SesionesRepository
+import com.KivoFit.domain.repository.user.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,7 +18,13 @@ abstract class AppModule {
 
     @Binds
     @Singleton
-    abstract fun bindAuthRepository(
-        impl: FakeAuthRepository
-    ): AuthRepository
+    abstract fun bindAuthRepository(impl: RemoteAuthRepository): AuthRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindUserRepository(impl: RemoteUserRepository): UserRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSesionesRepository(impl: RemoteSesionesRepository): SesionesRepository
 }

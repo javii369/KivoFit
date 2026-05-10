@@ -16,6 +16,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -63,7 +64,23 @@ fun CalendarScreen(
             color = MaterialTheme.colorScheme.onBackground
         )
 
-        Spacer(Modifier.height(s.lg))
+        Spacer(Modifier.height(s.sm))
+
+        if (state.isLoading) {
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            Spacer(Modifier.height(s.md))
+        }
+
+        state.errorMessage?.takeIf { it.isNotBlank() && !state.isLoading }?.let { err ->
+            Text(
+                text = err,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error
+            )
+            Spacer(Modifier.height(s.md))
+        }
+
+        Spacer(Modifier.height(s.sm))
 
         MonthCalendar(
             displayedYear = displayedYear,
@@ -358,7 +375,7 @@ private fun ClassRow(item: CalendarClass) {
 @Preview(showBackground = true)
 private fun CalendarScreenEmptyPreview() {
     KivoFitTheme {
-        CalendarScreen(state = CalendarUiState())
+        CalendarScreen(state = CalendarUiState(isLoading = false))
     }
 }
 
@@ -368,6 +385,7 @@ private fun CalendarScreenWithClassesPreview() {
     KivoFitTheme {
         CalendarScreen(
             state = CalendarUiState(
+                isLoading = false,
                 classes = listOf(
                     CalendarClass("1", "Funcional", "Lun 5 May", "18:00", 60),
                     CalendarClass("2", "Yoga", "Mar 6 May", "10:00", 45),
