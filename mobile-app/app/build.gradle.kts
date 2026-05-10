@@ -16,18 +16,40 @@ android {
         applicationId = "com.KivoFit"
         minSdk = 24
         targetSdk = 36
-        versionCode = 1
+        versionCode = 2
         versionName = "1.0"
+    }
 
-        val props = Properties().apply {
-            val f = rootProject.file("local.properties")
-            if (f.exists()) f.inputStream().use { load(it) }
+    // Elige variante en Android Studio → Build Variants: "deviceDebug" (móvil Wi‑Fi) o "emuDebug" (emulador).
+    flavorDimensions += "server"
+    productFlavors {
+        create("device") {
+            dimension = "server"
+            val props = Properties().apply {
+                val f = rootProject.file("local.properties")
+                if (f.exists()) f.inputStream().use { load(it) }
+            }
+            val raw = props.getProperty("API_BASE_URL", "http://192.168.0.13:8000/api/")
+                .trim()
+                .trim('"')
+            check(raw.isNotBlank()) {
+                "Define API_BASE_URL en mobile-app/local.properties (ej. http://TU_PC:8000/api/)"
+            }
+            val apiBase = if (raw.endsWith("/")) raw else "$raw/"
+            buildConfigField(
+                "String",
+                "API_BASE_URL",
+                "\"${apiBase.replace("\"", "\\\"")}\""
+            )
         }
-        // En local.properties: API_BASE_URL=http://TU_IP_LAN:8000/api/  (móvil físico)
-        // Emulador sin override: http://10.0.2.2:8000/api/
-        val raw = props.getProperty("API_BASE_URL", "http://10.0.2.2:8000/api/").trim().trim('"')
-        val apiBase = if (raw.endsWith("/")) raw else "$raw/"
-        buildConfigField("String", "API_BASE_URL", "\"${apiBase.replace("\"", "\\\"")}\"")
+        create("emu") {
+            dimension = "server"
+            buildConfigField(
+                "String",
+                "API_BASE_URL",
+                "\"http://10.0.2.2:8000/api/\""
+            )
+        }
     }
 
     buildTypes {
