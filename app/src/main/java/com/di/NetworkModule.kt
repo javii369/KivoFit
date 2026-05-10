@@ -20,7 +20,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = "http://10.0.2.2:8000/api/"
+    private const val BASE_URL = "http://10.0.2.2/KivoFit/kivofit-api/public/api/"
 
     @Provides
     @Singleton
@@ -54,4 +54,4 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideKivoFitApi(retrofit: Retrofit): KivoFitApi = retrofit.create(KivoFitApi::class.java)
-}
+}   
