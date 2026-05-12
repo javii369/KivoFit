@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         snackbarHostState = snackbarHostState,
                         contentPadding = padding,
-                        start = com.KivoFit.navigation.Route.Inicio
+                        start = com.KivoFit.navigation.Route.Login
                     )
                 }
             }

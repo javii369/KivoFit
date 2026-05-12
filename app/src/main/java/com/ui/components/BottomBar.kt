@@ -40,6 +40,11 @@ fun BottomBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination: NavDestination? = navBackStackEntry?.destination
 
+    val hidden = currentDestination?.route == Route.Login.route ||
+            currentDestination?.route == Route.Register.route ||
+            currentDestination?.route == Route.RecoverPassword.route
+    if (hidden) return
+
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.surface,
         contentColor = MaterialTheme.colorScheme.onSurface

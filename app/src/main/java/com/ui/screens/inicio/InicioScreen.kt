@@ -60,14 +60,13 @@ fun InicioScreen(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(s.lg)
+            .padding(start = s.lg, end = s.lg, top = s.xs, bottom = s.xl)
     ) {
-        Column {
+        Column(modifier = Modifier.fillMaxWidth()) {
             Text(
                 "¡Hola, ${state.userName}!",
                 style = MaterialTheme.typography.headlineMedium
             )
-            Spacer(modifier = Modifier.height(s.xs))
             Text(
                 "Listo para entrenar hoy",
                 style = MaterialTheme.typography.bodyMedium,
@@ -75,7 +74,7 @@ fun InicioScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(s.xl))
+        Spacer(modifier = Modifier.height(s.sm))
 
         Column(verticalArrangement = Arrangement.spacedBy(s.md)) {
             Row(
@@ -118,7 +117,7 @@ fun InicioScreen(
             }
         }
 
-        Spacer(modifier = Modifier.height(s.xl))
+        Spacer(modifier = Modifier.height(s.sm))
 
         Card(
             modifier = Modifier
@@ -189,7 +188,7 @@ fun InicioScreen(
             }
         }
 
-        Spacer(modifier = Modifier.height(s.xl))
+        Spacer(modifier = Modifier.height(s.sm))
 
         Text(
             "Acciones Rápidas",
