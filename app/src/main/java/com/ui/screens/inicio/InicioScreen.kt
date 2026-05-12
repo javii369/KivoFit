@@ -215,8 +215,8 @@ fun InicioScreen(
                 subtitle = state.routineInfo,
                 onClick = onViewRoutine,
                 modifier = Modifier.fillMaxWidth(),
-                circleColor = MaterialTheme.colorScheme.secondary,
-                contentColor = MaterialTheme.colorScheme.onSecondary
+                circleColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             )
         }
     }
