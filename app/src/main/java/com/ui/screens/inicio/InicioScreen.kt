@@ -125,19 +125,19 @@ fun InicioScreen(
                 .height(200.dp),
             shape = MaterialTheme.shapes.large,
             colors = CardDefaults.cardColors(
-                containerColor = Color(0xFF6933F7).copy(alpha = 0.65f)
+                containerColor = Color(0xFF492833).copy(alpha = 0.65f)
             )
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
                 Text(
                     "Nuevo",
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.onTertiary,
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .padding(s.sm)
                         .background(
-                            color = MaterialTheme.colorScheme.onPrimary,
+                            color = MaterialTheme.colorScheme.tertiary,
                             shape = MaterialTheme.shapes.small
                         )
                         .padding(horizontal = s.sm, vertical = s.xs)
@@ -166,21 +166,21 @@ fun InicioScreen(
                         Text(
                             "Plan Personalizado",
                             style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.onTertiary
+                            color = Color.White
                         )
                         Spacer(modifier = Modifier.height(s.sm))
                         Text(
                             "Completa el formulario para que tu entrenador pueda diseñar tu rutina y dieta a medida",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onTertiary,
+                            color = Color.White,
                             maxLines = 3,
                             overflow = TextOverflow.Ellipsis
                         )
                         Spacer(modifier = Modifier.height(s.sm))
                         Text(
-                            "Solicitar ahora >",
+                            "Solicitar ahora",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.secondary,
+                            color = Color(0xFF06DF72),
                             modifier = Modifier.clickable { onRequestPlan() }
                         )
                     }
