@@ -74,9 +74,6 @@ android {
         compose = true
         buildConfig = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeBom.get()
-    }
 }
 
 dependencies {
@@ -103,7 +100,6 @@ dependencies {
     implementation(libs.okhttp.logging)
     implementation(libs.moshi)
     implementation(libs.moshi.kotlin)
-    kapt(libs.moshi.codegen)
 
     implementation(libs.androidx.datastore.preferences)
 

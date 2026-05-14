@@ -5,6 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.KivoFit.domain.repository.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import com.KivoFit.navigation.Route
+import com.KivoFit.navigation.UiEvent
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,9 +34,7 @@ class InicioViewModel @Inject constructor(
     )
     val state: StateFlow<InicioUiState> = _state.asStateFlow()
 
-    private val _events = kotlinx.coroutines.channels.Channel<com.KivoFit.navigation.UiEvent>(
-        kotlinx.coroutines.channels.Channel.BUFFERED
-    )
+    private val _events = Channel<UiEvent>(Channel.BUFFERED)
     val events = _events.receiveAsFlow()
 
     init {
@@ -49,18 +50,14 @@ class InicioViewModel @Inject constructor(
     }
 
     fun onRequestPlan() = viewModelScope.launch {
-        _events.send(
-            com.KivoFit.navigation.UiEvent.Navigate(
-                route = com.KivoFit.navigation.Route.PlanForm.route
-            )
-        )
+        _events.send(UiEvent.Navigate(route = Route.PlanForm.route))
     }
 
     fun onReserveClass() = viewModelScope.launch {
         _events.send(
-            com.KivoFit.navigation.UiEvent.Navigate(
-                route = com.KivoFit.navigation.Route.Calendar.route,
-                popUpTo = com.KivoFit.navigation.Route.Inicio.route,
+            UiEvent.Navigate(
+                route = Route.Calendar.route,
+                popUpTo = Route.Inicio.route,
                 inclusive = false,
                 singleTop = true
             )
@@ -68,10 +65,6 @@ class InicioViewModel @Inject constructor(
     }
 
     fun onViewRoutine() = viewModelScope.launch {
-        _events.send(
-            com.KivoFit.navigation.UiEvent.Navigate(
-                route = com.KivoFit.navigation.Route.Routine.route
-            )
-        )
+        _events.send(UiEvent.Navigate(route = Route.Routine.route))
     }
 }

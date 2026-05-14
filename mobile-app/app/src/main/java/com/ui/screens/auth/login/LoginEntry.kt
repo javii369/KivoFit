@@ -1,8 +1,7 @@
 package com.KivoFit.ui.screens.auth.login
 
-import com.KivoFit.ui.screens.login.LoginScreen
-
 import androidx.compose.runtime.Composable
+import com.KivoFit.ui.screens.login.LoginScreen
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel

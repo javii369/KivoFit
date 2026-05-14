@@ -1,16 +1,13 @@
 package com.KivoFit.data.network.dto
 
 import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 
-@JsonClass(generateAdapter = true)
 data class ClaseSummaryDto(
     val id: Long,
     @Json(name = "nombre_clase") val nombreClase: String,
     val nivel: String?
 )
 
-@JsonClass(generateAdapter = true)
 data class SesionClaseDto(
     val id: Long,
     @Json(name = "clase_id") val claseId: Long,

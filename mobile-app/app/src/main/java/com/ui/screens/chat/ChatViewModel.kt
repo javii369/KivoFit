@@ -2,23 +2,25 @@ package com.KivoFit.ui.screens.chat
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.KivoFit.domain.repository.chat.ChatRepository
+import com.KivoFit.navigation.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import com.KivoFit.navigation.UiEvent
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import javax.inject.Inject
 
 @HiltViewModel
-class ChatViewModel @Inject constructor() : ViewModel() {
+class ChatViewModel @Inject constructor(
+    private val chatRepository: ChatRepository
+) : ViewModel() {
 
     private val _state = MutableStateFlow(
         ChatUiState(
@@ -26,7 +28,7 @@ class ChatViewModel @Inject constructor() : ViewModel() {
                 ChatMessage(
                     id = "welcome",
                     author = ChatAuthor.Assistant,
-                    text = "¡Hola! Soy tu asistente de KivoFit. ¿En qué puedo ayudarte hoy?",
+                    text = "¡Hola! Soy KivoBot, tu asistente personal de fitness. ¿En qué puedo ayudarte hoy? Puedo orientarte sobre rutinas, nutrición, recuperación y mucho más.",
                     timeLabel = currentTimeLabel()
                 )
             )
@@ -43,7 +45,7 @@ class ChatViewModel @Inject constructor() : ViewModel() {
 
     fun onSend() {
         val text = _state.value.draft.trim()
-        if (text.isEmpty()) return
+        if (text.isEmpty() || _state.value.assistantTyping) return
 
         val userMessage = ChatMessage(
             id = "u-${System.currentTimeMillis()}",
@@ -55,25 +57,41 @@ class ChatViewModel @Inject constructor() : ViewModel() {
             it.copy(
                 messages = it.messages + userMessage,
                 draft = "",
-                assistantTyping = true
+                assistantTyping = true,
+                error = null
             )
         }
 
         viewModelScope.launch {
-            delay(900)
-            val reply = ChatMessage(
-                id = "a-${System.currentTimeMillis()}",
-                author = ChatAuthor.Assistant,
-                text = "Recibido. En cuanto conectemos el modelo te responderé al instante.",
-                timeLabel = currentTimeLabel()
+            val result = chatRepository.send(text)
+            result.fold(
+                onSuccess = { reply ->
+                    _state.update {
+                        it.copy(
+                            messages = it.messages + ChatMessage(
+                                id = "a-${System.currentTimeMillis()}",
+                                author = ChatAuthor.Assistant,
+                                text = reply,
+                                timeLabel = currentTimeLabel()
+                            ),
+                            assistantTyping = false
+                        )
+                    }
+                },
+                onFailure = { error ->
+                    _state.update {
+                        it.copy(
+                            assistantTyping = false,
+                            error = error.message ?: "Error al conectar con el asistente"
+                        )
+                    }
+                }
             )
-            _state.update {
-                it.copy(
-                    messages = it.messages + reply,
-                    assistantTyping = false
-                )
-            }
         }
+    }
+
+    fun onErrorDismissed() {
+        _state.update { it.copy(error = null) }
     }
 
     private fun currentTimeLabel(): String =

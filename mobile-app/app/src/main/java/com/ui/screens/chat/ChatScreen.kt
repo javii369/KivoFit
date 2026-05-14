@@ -20,9 +20,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,14 +39,23 @@ import com.KivoFit.ui.theme.KivoFitTheme
 fun ChatScreen(
     state: ChatUiState,
     onDraftChange: (String) -> Unit,
-    onSend: () -> Unit
+    onSend: () -> Unit,
+    onErrorDismissed: () -> Unit = {}
 ) {
     val s = KivoFitTheme.spacing
     val listState = rememberLazyListState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(state.messages.size, state.assistantTyping) {
         val target = state.messages.size - 1 + (if (state.assistantTyping) 1 else 0)
         if (target >= 0) listState.animateScrollToItem(target)
+    }
+
+    LaunchedEffect(state.error) {
+        if (state.error != null) {
+            snackbarHostState.showSnackbar(state.error)
+            onErrorDismissed()
+        }
     }
 
     Box(
@@ -61,36 +74,48 @@ fun ChatScreen(
                 .align(Alignment.Center)
         )
 
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        ChatHeader(title = state.title, status = state.statusLabel)
-
-        LazyColumn(
-            state = listState,
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .padding(horizontal = s.md),
-            verticalArrangement = Arrangement.spacedBy(s.sm),
-            contentPadding = PaddingValues(vertical = s.md)
+        Column(
+            modifier = Modifier.fillMaxSize()
         ) {
-            items(state.messages, key = { it.id }) { msg ->
-                MessageBubble(msg)
-            }
-            if (state.assistantTyping) {
-                item(key = "typing") {
-                    TypingBubble()
+            ChatHeader(title = state.title, status = state.statusLabel)
+
+            LazyColumn(
+                state = listState,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(horizontal = s.md),
+                verticalArrangement = Arrangement.spacedBy(s.sm),
+                contentPadding = PaddingValues(vertical = s.md)
+            ) {
+                items(state.messages, key = { it.id }) { msg ->
+                    MessageBubble(msg)
+                }
+                if (state.assistantTyping) {
+                    item(key = "typing") {
+                        TypingBubble()
+                    }
                 }
             }
+
+            ChatInputBar(
+                value = state.draft,
+                onValueChange = onDraftChange,
+                onSend = onSend,
+                enabled = !state.assistantTyping
+            )
         }
 
-        ChatInputBar(
-            value = state.draft,
-            onValueChange = onDraftChange,
-            onSend = onSend
-        )
-    }
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        ) { data ->
+            Snackbar(
+                snackbarData = data,
+                containerColor = MaterialTheme.colorScheme.errorContainer,
+                contentColor = MaterialTheme.colorScheme.onErrorContainer
+            )
+        }
     }
 }
 
@@ -204,7 +229,8 @@ private fun TypingBubble() {
 private fun ChatInputBar(
     value: String,
     onValueChange: (String) -> Unit,
-    onSend: () -> Unit
+    onSend: () -> Unit,
+    enabled: Boolean = true
 ) {
     val s = KivoFitTheme.spacing
     Row(
@@ -218,6 +244,7 @@ private fun ChatInputBar(
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier.weight(1f),
+            enabled = enabled,
             placeholder = {
                 Text(
                     "Escribe un mensaje",

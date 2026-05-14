@@ -20,6 +20,7 @@ fun ChatEntry(
     ChatScreen(
         state = state,
         onDraftChange = vm::onDraftChange,
-        onSend = vm::onSend
+        onSend = vm::onSend,
+        onErrorDismissed = vm::onErrorDismissed
     )
 }

@@ -1,6 +1,8 @@
 package com.KivoFit.data.network
 
 import com.KivoFit.data.network.dto.AuthResponse
+import com.KivoFit.data.network.dto.ConsultaIaRequest
+import com.KivoFit.data.network.dto.ConsultaIaResponse
 import com.KivoFit.data.network.dto.LoginRequest
 import com.KivoFit.data.network.dto.MessageResponse
 import com.KivoFit.data.network.dto.RegisterRequest
@@ -26,4 +28,7 @@ interface KivoFitApi {
 
     @GET("sesiones")
     suspend fun sesiones(): List<SesionClaseDto>
+
+    @POST("consultas-ia")
+    suspend fun enviarConsulta(@Body body: ConsultaIaRequest): ConsultaIaResponse
 }
