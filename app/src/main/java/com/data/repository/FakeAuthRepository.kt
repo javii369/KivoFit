@@ -1,15 +1,38 @@
 package com.KivoFit.data.repository
 
+import com.KivoFit.data.local.TokenStore
 import com.KivoFit.domain.repository.auth.AuthRepository
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FakeAuthRepository @Inject constructor() : AuthRepository {
+class FakeAuthRepository @Inject constructor(
+    private val tokenStore: TokenStore
+) : AuthRepository {
+
+    private data class FakeUser(
+        val email: String,
+        val password: String,
+        val role: String,
+        val name: String
+    )
+
+    private val users = listOf(
+        FakeUser("admin@ceac.com", "1234", "admin", "Admin"),
+        FakeUser("entrenador@ceac.com", "1234", "entrenador", "Entrenador")
+    )
 
     override suspend fun login(email: String, password: String): Result<Unit> {
-        return if (email == "admin@ceac.com" && password == "1234") {
+        delay(400)
+        val user = users.firstOrNull { it.email.equals(email, ignoreCase = true) && it.password == password }
+        return if (user != null) {
+            tokenStore.save(
+                token = "fake-token-${user.role}",
+                role = user.role,
+                email = user.email,
+                name = user.name
+            )
             Result.success(Unit)
         } else {
             Result.failure(Exception("Credenciales incorrectas"))
